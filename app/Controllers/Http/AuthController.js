@@ -1,6 +1,5 @@
 'use strict'
 const User = use('App/Models/User');
-const { validate } = use('Validator')
 class AuthController {
     async register({ request, auth, response }) {
         let query = new User()
@@ -13,17 +12,6 @@ class AuthController {
     }
 
     async login({ request, auth, response }) {
-
-        const rules = {
-            email: 'required|email',
-            password: 'required'
-        }
-
-        const validation = await validate(request.all(), rules)
-        if (validation.fails()) {
-            return response.status(200).send(validation.messages())
-        }
-
         const email = request.input("email")
         const password = request.input("password");
         try {

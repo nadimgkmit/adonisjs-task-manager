@@ -21,7 +21,7 @@ Route.on('/').render('welcome')
 
 Route.group(() => {
     Route.post('/register', 'AuthController.register').validator('StoreUser')
-    Route.post('/login', 'AuthController.login')
+    Route.post('/login', 'AuthController.login').validator('Login')
 }).prefix('/auth')
 
 Route.group(() => {
