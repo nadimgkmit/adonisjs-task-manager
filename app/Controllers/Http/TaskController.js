@@ -1,6 +1,5 @@
 'use strict'
 const Task = use('App/Models/Task');
-const { validate } = use('Validator')
 class TaskController {
 
     async index({ request, response, view }) {
@@ -61,15 +60,6 @@ class TaskController {
         try {
             const query = new Task()
             if (query) {
-                const rules = {
-                    user_id: 'required',
-                    name: 'required',
-                }
-                const validation = await validate(request.all(), rules)
-                if (validation.fails()) {
-                    return response.status(200).send(validation.messages())
-                }
-
                 query.user_id = request.input('user_id')
                 query.name = request.input('name')
                 query.details = request.input('details')
@@ -102,15 +92,6 @@ class TaskController {
         try {
             let query = await Task.find(params.id)
             if (query) {
-                const rules = {
-                    user_id: 'required',
-                    name: 'required',
-                }
-                const validation = await validate(request.all(), rules)
-                if (validation.fails()) {
-                    return response.status(200).send(validation.messages())
-                }
-
                 query.user_id = request.input('user_id')
                 query.name = request.input('name')
                 query.details = request.input('details')
