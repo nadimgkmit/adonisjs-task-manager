@@ -84,10 +84,8 @@ class UserController {
 
     async show({ params, request, response, view }) {
         try {
-            const query = await User.find(params.id)
+            const query = await User.query().with('tasks').where('id', params.id).first()
             if (query) {
-                const tasks = await query.tasks().fetch()
-                query.tasks = tasks
                 return response.status(200).send(query)
             } else {
                 return response.status(404).send({ message: 'Not found' })
