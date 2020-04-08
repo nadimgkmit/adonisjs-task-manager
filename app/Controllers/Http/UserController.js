@@ -1,6 +1,5 @@
 'use strict'
 const User = use('App/Models/User');
-const { validate } = use('Validator')
 class UserController {
     async index({ request, response, view }) {
         try {
@@ -126,13 +125,6 @@ class UserController {
         try {
             let query = await User.find(params.id)
             if (query) {
-                const rules = {
-                    password: 'required',
-                }
-                const validation = await validate(request.all(), rules)
-                if (validation.fails()) {
-                    return response.status(200).send(validation.messages())
-                }
                 query.password = request.input('password')
                 await query.save()
                 return response.status(200).send({ message: 'Password update successfully' })
