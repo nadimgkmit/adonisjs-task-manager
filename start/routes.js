@@ -30,7 +30,7 @@ Route.group(() => {
     Route.post('/', 'UserController.store').validator('StoreUser')
     Route.put('/:id', 'UserController.update').validator('StoreUser')
     Route.delete('/:id', 'UserController.destroy')
-    Route.put('/change_password/:id', 'UserController.changePassword')
+    Route.put('/change_password/:id', 'UserController.changePassword').validator('UpdatePassword')
 }).prefix('/users').middleware('auth')
 
 Route.group(() => {
