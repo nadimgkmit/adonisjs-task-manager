@@ -36,7 +36,7 @@ Route.group(() => {
 Route.group(() => {
     Route.get('/', 'TaskController.index')
     Route.get('/:id', 'TaskController.show')
-    Route.post('/', 'TaskController.store')
-    Route.put('/:id', 'TaskController.update')
+    Route.post('/', 'TaskController.store').validator('StoreTask')
+    Route.put('/:id', 'TaskController.update').validator('StoreTask')
     Route.delete('/:id', 'TaskController.destroy')
 }).prefix('/tasks').middleware('auth')
