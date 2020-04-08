@@ -3,7 +3,6 @@ const User = use('App/Models/User');
 const { validate } = use('Validator')
 class AuthController {
     async register({ request, auth, response }) {
-
         const rules = {
             email: 'required|email|unique:users,email',
             password: 'required'
@@ -14,13 +13,9 @@ class AuthController {
             return response.status(200).send(validation.messages())
         }
 
-        const email = request.input("email")
-        const password = request.input("password")
-
         let query = new User()
-        query.role_id = 1
-        query.email = email
-        query.password = password
+        query.email = request.input("email")
+        query.password = request.input("password")
         await query.save()
         const result = await User.findBy('email', query.email)
         let accessToken = await auth.generate(result)
