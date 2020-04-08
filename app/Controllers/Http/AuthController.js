@@ -3,16 +3,6 @@ const User = use('App/Models/User');
 const { validate } = use('Validator')
 class AuthController {
     async register({ request, auth, response }) {
-        const rules = {
-            email: 'required|email|unique:users,email',
-            password: 'required'
-        }
-
-        const validation = await validate(request.all(), rules)
-        if (validation.fails()) {
-            return response.status(200).send(validation.messages())
-        }
-
         let query = new User()
         query.email = request.input("email")
         query.password = request.input("password")
