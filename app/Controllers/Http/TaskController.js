@@ -1,6 +1,5 @@
 'use strict'
 const Task = use('App/Models/Task');
-const { validate } = use('Validator')
 class TaskController {
 
     async index({ request, response, view }) {
