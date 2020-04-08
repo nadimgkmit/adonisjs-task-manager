@@ -6,7 +6,7 @@ class UserController {
         try {
             const where = [
                 'id',
-                'name',
+                'email',
             ]
             let page = null;
             let perPage = null;
