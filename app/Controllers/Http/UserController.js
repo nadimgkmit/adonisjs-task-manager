@@ -60,14 +60,6 @@ class UserController {
         try {
             const query = new User()
             if (query) {
-                const rules = {
-                    name: 'required',
-                    email: 'required|email|unique:users,email',
-                }
-                const validation = await validate(request.all(), rules)
-                if (validation.fails()) {
-                    return response.status(200).send(validation.messages())
-                }
 
                 query.name = request.input('name')
                 query.email = request.input('email')
@@ -100,18 +92,8 @@ class UserController {
         try {
             let query = await User.find(params.id)
             if (query) {
-                const rules = {
-                    name: 'required',
-                    email: 'required|email',
-                }
-                const validation = await validate(request.all(), rules)
-                if (validation.fails()) {
-                    return response.status(200).send(validation.messages())
-                }
-
                 query.name = request.input('name')
                 query.email = request.input('email')
-
                 await query.save()
                 return response.status(200).send({ message: 'Update successfully' })
             } else {
