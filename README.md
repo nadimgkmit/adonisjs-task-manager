@@ -36,5 +36,5 @@ adonis migration:run
 Run the following command to run app.
 
 ```js
-adonis migration:run
+adonis serve --dev
 ```
