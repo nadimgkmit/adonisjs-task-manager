@@ -17,3 +17,25 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
+
+Route.group(() => {
+    Route.post('/register', 'AuthController.register')
+    Route.post('/login', 'AuthController.login')
+}).prefix('/auth')
+
+Route.group(() => {
+    Route.get('/', 'UserController.index')
+    Route.get('/:id', 'UserController.show')
+    Route.post('/', 'UserController.store')
+    Route.put('/:id', 'UserController.update')
+    Route.delete('/:id', 'UserController.destroy')
+    Route.put('/change_password/:id', 'UserController.changePassword')
+}).prefix('/users').middleware('auth')
+
+Route.group(() => {
+    Route.get('/', 'TaskController.index')
+    Route.get('/:id', 'TaskController.show')
+    Route.post('/', 'TaskController.store')
+    Route.put('/:id', 'TaskController.update')
+    Route.delete('/:id', 'TaskController.destroy')
+}).prefix('/tasks').middleware('auth')
