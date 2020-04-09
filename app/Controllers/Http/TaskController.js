@@ -1,11 +1,12 @@
 'use strict'
 const Task = use('App/Models/Task');
+const Antl = use('Antl')
 class TaskController {
 
     async index({ request, response, view }) {
         const where = [
-            'id',
             'name',
+            'details'
         ]
         let page = null;
         let perPage = null;
@@ -48,7 +49,9 @@ class TaskController {
         if (result) {
             return response.status(200).send(result)
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
         }
     }
 
@@ -59,19 +62,32 @@ class TaskController {
             query.name = request.input('name')
             query.details = request.input('details')
 
-            await query.save()
-            return response.status(200).send({ message: 'Create successfully' })
+            const result = await query.save()
+            if (result) {
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.create_success', { name: "Task" })
+                })
+            } else {
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
+            }
+
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
         }
     }
 
-    async show({ params, request, response, view }) {
-        const query = await Task.find(params.id)
+    async show({ params, request, response, view }) {        
+        const query = await Task.query().with('user').where('id', params.id).first()
         if (query) {
             return response.status(200).send(query)
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
         }
     }
 
@@ -81,24 +97,40 @@ class TaskController {
             query.user_id = request.input('user_id')
             query.name = request.input('name')
             query.details = request.input('details')
-            await query.save()
-            return response.status(200).send({ message: 'Update successfully' })
+            const result = await query.save()
+            if (result) {
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.update_success', { name: "Task" })
+                })
+            } else {
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
+            }
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
         }
     }
 
     async destroy({ params, request, response }) {
         let query = await Task.find(params.id)
         if (query) {
-            const result = query.delete()
+            const result = await query.delete()
             if (result) {
-                return response.status(200).send({ message: 'Delete successfully' })
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.delete_success', { name: "Task" })
+                })
             } else {
-                return response.status(500).send({ message: 'Error' })
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
             }
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "Task" })
+            })
         }
     }
 }

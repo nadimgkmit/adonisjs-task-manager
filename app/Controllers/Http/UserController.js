@@ -1,9 +1,9 @@
 'use strict'
 const User = use('App/Models/User');
+const Antl = use('Antl')
 class UserController {
     async index({ request, response, view }) {
         const where = [
-            'id',
             'email',
         ]
         let page = null;
@@ -47,7 +47,9 @@ class UserController {
         if (result) {
             return response.status(200).send(result)
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 
@@ -58,10 +60,21 @@ class UserController {
             query.name = request.input('name')
             query.email = request.input('email')
 
-            await query.save()
-            return response.status(200).send({ message: 'Create successfully' })
+            const result = await query.save()
+            if (result) {
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.create_success', { name: "User" })
+                })
+            } else {
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
+            }
+            
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 
@@ -70,7 +83,9 @@ class UserController {
         if (query) {
             return response.status(200).send(query)
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 
@@ -79,24 +94,40 @@ class UserController {
         if (query) {
             query.name = request.input('name')
             query.email = request.input('email')
-            await query.save()
-            return response.status(200).send({ message: 'Update successfully' })
+            const result = await query.save()
+            if (result) {
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.update_success', { name: "User" })
+                })
+            } else {
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
+            }
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 
     async destroy({ params, request, response }) {
         let query = await User.find(params.id)
         if (query) {
-            const result = query.delete()
+            const result = await query.delete()
             if (result) {
-                return response.status(200).send({ message: 'Delete successfully' })
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.delete_success', { name: "User" })
+                })
             } else {
-                return response.status(500).send({ message: 'Error' })
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
             }
         } else {
-            return response.status(404).send({ message: 'Not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 
@@ -104,10 +135,20 @@ class UserController {
         let query = await User.find(params.id)
         if (query) {
             query.password = request.input('password')
-            await query.save()
-            return response.status(200).send({ message: 'Password update successfully' })
+            const result = await query.save()
+            if (result) {
+                return response.status(200).send({
+                    message: Antl.formatMessage('response.password_update_success', { name: "User" })
+                })
+            } else {
+                return response.status(500).send({
+                    message: Antl.formatMessage('response.something_went_wrong')
+                })
+            }
         } else {
-            return response.status(404).send({ message: 'User not found' })
+            return response.status(404).send({
+                message: Antl.formatMessage('response.not_found', { name: "User" })
+            })
         }
     }
 }
