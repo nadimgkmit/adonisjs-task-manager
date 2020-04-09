@@ -14,16 +14,12 @@ class AuthController {
     async login({ request, auth, response }) {
         const email = request.input("email")
         const password = request.input("password");
-        try {
-            if (await auth.attempt(email, password)) {
-                let user = await User.findBy('email', email)
-                let accessToken = await auth.generate(user)
-                return response.status(200).send({ message: 'Login successfully', data: { "user": user, "access_token": accessToken } })
-            } else {
-                return response.status(404).send({ message: 'You first need to register!' })
-            }
-        } catch (e) {
-            return response.status(404).send({ message: e.message })
+        if (await auth.attempt(email, password)) {
+            let user = await User.findBy('email', email)
+            let accessToken = await auth.generate(user)
+            return response.status(200).send({ message: 'Login successfully', data: { "user": user, "access_token": accessToken } })
+        } else {
+            return response.status(404).send({ message: 'You first need to register!' })
         }
     }
 }
